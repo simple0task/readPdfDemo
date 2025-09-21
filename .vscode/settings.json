@@ -1,0 +1,13 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		".vscode": true,
+		".nuxt": true,
+		"node_modules": true,
+	},
+	"eslint.experimental.useFlatConfig": true,
+	"editor.formatOnSave": false,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+}

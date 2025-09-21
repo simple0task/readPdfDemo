@@ -1,0 +1,39 @@
+{
+    "name": "read-pdf",
+    "private": true,
+    "type": "module",
+    "license": "UNLICENSED",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "clean": "npm cache clean --force",
+        "start": "node .output/server/index.mjs",
+        "test": "echo 'No tests specified'",
+        "lint": "eslint .",
+        "fix": "eslint --fix . "
+    },
+    "dependencies": {
+        "@mdi/font": "^7.4.47",
+        "fs": "^0.0.1-security",
+        "nuxt": "^3.14.1592",
+        "path": "^0.12.7",
+        "pdfjs-dist": "^5.4.149",
+        "sqlite": "^5.1.1",
+        "sqlite3": "^5.1.7",
+        "vue": "^3.5.13",
+        "vue-router": "^4.4.5",
+        "vuetify": "^3.7.4"
+    },
+    "devDependencies": {
+        "@nuxt/eslint": "^0.7.1",
+        "@nuxtjs/google-fonts": "^3.2.0",
+        "@types/nodemailer": "^6.4.17",
+        "dayjs-nuxt": "^2.1.11",
+        "eslint": "^9.15.0",
+        "sass-embedded": "^1.93.0",
+        "typescript": "^5.6.3"
+    }
+}

@@ -82,10 +82,11 @@ async function readFile(e: Event) {
 }
 
 async function readImage(image: string) {
+  const base64Image = convBase64(image)
   res.value = await $fetch('/api/ReadImage', {
     method: 'POST',
     body: {
-      base64Image: image,
+      base64Image,
     },
   })
 }

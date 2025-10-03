@@ -3,12 +3,13 @@ import { createWorker } from 'tesseract.js'
 async function getOcr(base64Image: string): Promise<string> {
   const worker = await createWorker('jpn+eng')
   try {
-    const { data: { text } } = await worker.recognize(base64Image)
+    // Base64文字列をData URL形式に変換
+    const imageData = base64Image.startsWith('data:')
+      ? base64Image
+      : `data:image/png;base64,${base64Image}`
+
+    const { data: { text } } = await worker.recognize(imageData)
     return text
-  }
-  catch (e) {
-    console.error(e)
-    return ''
   }
   finally {
     await worker.terminate()
@@ -16,6 +17,14 @@ async function getOcr(base64Image: string): Promise<string> {
 }
 
 export default defineEventHandler(async (event) => {
+  // POSTメソッドのみ許可
+  if (event.method !== 'POST') {
+    throw createError({
+      statusCode: 405,
+      statusMessage: 'Method Not Allowed',
+    })
+  }
+
   try {
     const body = await readBody(event)
     const base64Image = body.base64Image

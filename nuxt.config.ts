@@ -8,12 +8,6 @@ export default {
     },
   },
 
-  runtimeConfig: {
-    public: {
-      DB_PATH: process.env.DB_PATH || '',
-    },
-  },
-
   app: {
     head: {
       title: 'PDF読み取りのデモ',

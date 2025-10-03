@@ -1,10 +1,10 @@
 <template>
   <div class="mx-auto w-75">
-    <h4 class="my-4">ＰＤＦアップロードしてください</h4>
+    <h4 class="my-4">画像もしくはＰＤＦアップロードしてください</h4>
     <v-file-input
-      accept=".pdf"
-      placeholder="ＰＤＦファイルを選択してください"
-      prepend-icon="mdi-paperclip"
+      accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp"
+      placeholder="ＰＤＦまたは画像ファイルを選択してください"
+      prepend-icon="mdi-image"
       hide-details="auto"
       :clearable="true"
       :disabled="loading"
@@ -12,6 +12,20 @@
       @click:clear="clear"
     />
     <div v-show="res && res?.fullText" class="my-2 pa-2 border-sm rounded">{{ res?.fullText }}</div>
+    <v-overlay
+      :model-value="loading"
+      class="align-center justify-center"
+      persistent
+      no-click-animation
+    >
+      <v-progress-circular
+        indeterminate
+        color="light-blue"
+        :rotate="0"
+        :size="40"
+        :width="5"
+      />
+    </v-overlay>
   </div>
 </template>
 
@@ -27,13 +41,17 @@ const res = ref<IRes>()
 const loading = ref(false)
 
 onMounted(async () => {
+  initRes()
+})
+
+const initRes = () => {
   res.value = {
     success: false,
     fullText: '',
     pages: 0,
     totalPages: 0,
   }
-})
+}
 
 async function readFile(e: Event) {
   const files = (e.target as HTMLInputElement).files
@@ -44,11 +62,32 @@ async function readFile(e: Event) {
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       if (e.target && typeof e.target.result === 'string') {
         loading.value = true
-        await readPdf(e.target.result)
+        if (e.target.result) {
+          initRes()
+          const fileExtension = file.name.split('.').pop()?.toLowerCase()
+          if (fileExtension === 'pdf') {
+            await readPdf(e.target.result)
+          }
+          else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension || '')) {
+            await readImage(e.target.result)
+          }
+        }
+        else {
+          await readPdf(e.target.result)
+        }
         loading.value = false
       }
     }
   }
+}
+
+async function readImage(image: string) {
+  res.value = await $fetch('/api/ReadImage', {
+    method: 'POST',
+    body: {
+      base64Image: image,
+    },
+  })
 }
 
 async function readPdf(pdf: string) {

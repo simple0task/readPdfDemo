@@ -1,15 +1,16 @@
 import { createWorker } from 'tesseract.js'
 
 async function getOcr(base64Image: string): Promise<string> {
-
   const worker = await createWorker('jpn+eng')
   try {
     const { data: { text } } = await worker.recognize(base64Image)
     return text
-  } catch(e) {
+  }
+  catch (e) {
     console.error(e)
     return ''
-  } finally {
+  }
+  finally {
     await worker.terminate()
   }
 }

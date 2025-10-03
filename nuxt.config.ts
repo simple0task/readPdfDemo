@@ -2,10 +2,7 @@
 export default {
   ssr: true,
   nitro: {
-    preset: 'node-server',
-    output: {
-      dir: '.output',
-    },
+    preset: 'vercel',
   },
 
   app: {

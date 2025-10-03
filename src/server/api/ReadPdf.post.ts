@@ -1,5 +1,13 @@
 // 動的インポートを使用してpdfjs-distを読み込み
 export default defineEventHandler(async (event) => {
+  // POSTメソッドのみ許可
+  if (event.method !== 'POST') {
+    throw createError({
+      statusCode: 405,
+      statusMessage: 'Method Not Allowed',
+    })
+  }
+
   try {
     const body = await readBody(event)
     const base64Pdf = body.base64Pdf
